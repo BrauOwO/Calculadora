@@ -9,7 +9,8 @@ package proyectocalculadora;
  * Programa 7.2
  * Clase que implementa una pila genérica usando un arreglo genérico.
  */
-//unu
+//
+
 public class PilaA <T> implements PilaADT <T>{
     private T[] colec;
     private int tope;

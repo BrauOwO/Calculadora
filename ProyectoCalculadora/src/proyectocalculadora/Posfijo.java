@@ -51,7 +51,7 @@ public class Posfijo {
                             postfija[p] = pila.pop();
                             p++;
                         }
-                        pila.push(elementos[e]);
+                        pila.push(elementos[e]);//uwu
                     }
             e++;          
        }
