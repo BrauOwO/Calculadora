@@ -33,23 +33,23 @@ public class Calculadora {
         p = 0;
         n = elementos.length;
         while(e<n){
-            String item = elementos[e];
-            if(prioridad(item) != 0){//es un operador
-                while (!pila.isEmpty() && !"(".equals(pila.peek()) && prioridad(item) <= prioridad(pila.peek()))
+            String uwu = elementos[e];
+            if(prioridad(uwu) != 0){//es un operador
+                while (!pila.isEmpty() && !"(".equals(pila.peek()) && prioridad(uwu) <= prioridad(pila.peek()))
                     //el nuevo operador bota de la pila al resultado a los de mayor o igual prioridad
                     postfija.add(pila.pop());
-                pila.push(item);
+                pila.push(uwu);
             } 
             else{
-                switch (item) {
-                    case "(" -> pila.push(item);
+                switch (uwu) {
+                    case "(" -> pila.push(uwu);
                     case ")" -> {
                         //vacío los operadores hasta encontrar el paréntesis que abría
                         while(!"(".equals(pila.peek()))
                             postfija.add(pila.pop());
                         pila.pop();
                     }
-                    default -> postfija.add(item); //es un operando
+                    default -> postfija.add(uwu); //es un operando
                 }
             }
             e++;
