@@ -81,8 +81,9 @@ public class Calculadora {
     }
     
     /**
-     * toda la clase evalua la muevo aqui por comodidad
+     * 
      * @param entrada
+     * toda la clase evalua la muevo aqui por comodidad
      * @return 
      */
     
@@ -138,9 +139,10 @@ public class Calculadora {
     
     
     /**
-     * Este metodo divide el String divido en espacio, diferenciando entre numeros 
+     * 
      * 
      * @param cadena
+     * Este metodo divide el String divido en espacio, diferenciando entre numeros 
      * @return String aditado
      */
     public String espaciarString(String cadena){
