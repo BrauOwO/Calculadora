@@ -27,29 +27,39 @@ public class Calculadora {
         elementos = obtieneTokens(cadena);
         ArrayList<String> postfija = new ArrayList();
         PilaADT <String> pila = new PilaA();
-        int e, p, n;
+        int e, n;
         
         e = 0;
-        p = 0;
-        n = elementos.length;
+        n =  elementos.length;
+        
+        boolean negInicial = "-".equals(elementos[0]);
+        if (negInicial){ 
+            postfija.add("-1");
+            e++;
+        }
+        
         while(e<n){
-            String uwu = elementos[e];
-            if(prioridad(uwu) != 0){//es un operador
-                while (!pila.isEmpty() && !"(".equals(pila.peek()) && prioridad(uwu) <= prioridad(pila.peek()))
+            String ele = elementos[e];
+            if(prioridad(ele) != 0){//es un operador
+                while (!pila.isEmpty() && !"(".equals(pila.peek()) && prioridad(ele) <= prioridad(pila.peek()))
                     //el nuevo operador bota de la pila al resultado a los de mayor o igual prioridad
                     postfija.add(pila.pop());
-                pila.push(uwu);
+                pila.push(ele);
             } 
             else{
-                switch (uwu) {
-                    case "(" -> pila.push(uwu);
+            switch (ele) {
+                    case "(" -> pila.push(ele);
                     case ")" -> {
                         //vacío los operadores hasta encontrar el paréntesis que abría
                         while(!"(".equals(pila.peek()))
                             postfija.add(pila.pop());
                         pila.pop();
+                        if (negInicial){
+                            postfija.add("*");
+                            negInicial = false;
+                        }
                     }
-                    default -> postfija.add(uwu); //es un operando
+                    default -> postfija.add(ele); //es un operando
                 }
             }
             e++;
@@ -73,9 +83,9 @@ public class Calculadora {
     private int prioridad(String dato){
         int resultado = 0; // En caso de que el dato sea un paréntesis izquierdo
         
-        switch (dato.charAt(0)){
-            case '+', '-' -> resultado = 1;
-            case '*', '/' -> resultado = 2;
+        switch (dato){
+            case "+", "-" -> resultado = 1;
+            case "*", "/" -> resultado = 2;
         }
         return resultado;
     }
@@ -103,15 +113,17 @@ public class Calculadora {
                     op2 = pila.pop();
                     op1 = pila.pop();
                     switch (entrada[i].charAt(0)){
-                        case '+': resul = op1 + op2;
-                            break;
-                        case '-': resul = op1 - op2;
-                            break;
-                        case '*': resul = op1 * op2;
-                            break;
-                        case '/': if (op2 == 0) // Si el denominador es 0 se lanza una excepción
-                                        throw new RuntimeException();
-                                  resul = op1 / op2;
+                        case '+' -> resul = op1 + op2;
+                        case '-' -> resul = op1 - op2;
+                        case '*' -> resul = op1 * op2;
+                        case '/' -> {
+                            if (op2 == 0){ // Si el denominador es 0 se lanza una excepción
+                                resultado = "No se puede dividir entre 0";
+                                throw new RuntimeException();
+                            }
+                            resul = op1 / op2;
+                        }
+                        default -> resul = op1 + op2;
                     }
                     pila.push(resul);                        
                     }
@@ -120,13 +132,12 @@ public class Calculadora {
             resultado = ""+pila.pop();
             return resultado;
         } catch (RuntimeException e) {
-            resultado = "inválida";
+            if ("".equals(resultado)) {
+                resultado = "Expresión no valida";
+            }
             return resultado;
             
-        }
-        
-            
-            
+        }      
     }
     private boolean noEsOperador(String dato){
         return !dato.equals("+") && !dato.equals("-") && !dato.equals("*") && !dato.equals("/");
@@ -144,28 +155,57 @@ public class Calculadora {
      * @param cadena
      * Este metodo divide el String divido en espacio, diferenciando entre numeros 
      * @return String aditado
-     */
+     */    
     public String espaciarString(String cadena){
         String text ="";
         
         for (int i = 0; i < cadena.length(); i++) {
             char c = cadena.charAt(i);
-            if (!Character.isDigit(c)) {
+            
+            if (!Character.isDigit(c) && c!='-' && c!='.') {
                 text+=" "+c+" ";
+                
             } else {
-                text+=c;
+                if (c == '-' && boolenaExcepcionNum(cadena, (i-1))) {
+                    text+=" "+c+" ";
+                    
+                } else {
+                    text+=c;
+                }
             }
+            
         }
         
         String replaceAll = text.replaceAll("\\s+", " ");
         String trim = replaceAll.trim();
-        
-        
-        
-        
-        
         return  trim;
+    }
+
+    public boolean boolenaExcepcionNum(String cadena, int charABuscar){
+        boolean prueba ;
+        try {
+            char charAt = cadena.charAt(charABuscar);            
+            prueba = Character.isDigit(charAt);
+            return prueba;
+            
+        } catch (Exception e) {
+            return prueba = false;
+           
+        } 
+    }
+    
+    public String calcEnUnPaso(String cadena){
+        cadena = calcula(conviertePostfija(espaciarString(cadena)));
+        return  cadena;
         
     }
     
+    public static void main(String[] args) {
+        Calculadora calc = new Calculadora();
+        
+        
+        System.out.println(calc.calcEnUnPaso("-1+212*(-8/-94.56+-9)"));
+        
+        
+    }
 }
