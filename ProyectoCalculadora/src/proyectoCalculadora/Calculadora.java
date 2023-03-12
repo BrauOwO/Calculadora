@@ -8,20 +8,42 @@ import java.util.ArrayList;
 
 /**
  *
- * @author fernando.puron
+ * 
+ * <pre>
+ * Clase Calculadora
+ * 
+ * Contiene las funciones para ser una calculadora sencilla 
+ * Usa la tecnica de pasar de infijo a posfijo
+ * </pre>
+ * 
+ * @author Braulio César Partida Meneses
+ * 
  */
 public class Calculadora {
+
+    /**
+     *Constructor
+     */
     public Calculadora(){
     }    
     
-    
+    /**
+     * obtieneTokens transforma una cadena a un array
+     * @param cadena de string
+     * @return String[] con la cadena separada cada que hay un espacio
+     */
     public String[] obtieneTokens(String  cadena){
         String[] ojo = cadena.split(" ");
       return ojo;
     }
     
-    
-    public String[] conviertePostfija(String  cadena) {
+    /**
+     * conviertePosfija recibe un String el cual convierte de infijo a posfijo.
+     * @param cadena de string
+     * @see espaciarString
+     * @return String[] con la cadena en modo posfijo
+     */
+    public String[] conviertePosfija(String  cadena) {
         String [] elementos;
         String [] resultado;
         elementos = obtieneTokens(cadena);
@@ -76,9 +98,11 @@ public class Calculadora {
         return resultado;
     }
     
-    /* Método auxiliar para el manejo de las prioridades de los operadores. Regresa 0,
-     * el valor más pequeño, cuando el dato dado es un "(". De esta manera
-     * el "(" sólo se saca de la pila cuando se encuentre un ")".
+    /**
+     * prioridad es un auxiliar para el manejo de las prioridades de los operadores, regresa 0 si 
+     * cuando el dato dado es un "(". 
+     * @param dato en String
+     * @return el int del resultado del switch 
      */
     private int prioridad(String dato){
         int resultado = 0; // En caso de que el dato sea un paréntesis izquierdo
@@ -91,12 +115,11 @@ public class Calculadora {
     }
     
     /**
-     * 
-     * @param entrada
-     * toda la clase evalua la muevo aqui por comodidad
-     * @return 
+     * calcula se encarga de dar el resultado de la operacion ingresada.
+     * @param entrada un String[] recibido de conviertePosfija
+     * @see conviertePosfija
+     * @return String con el resultado
      */
-    
     public String calcula(String [] entrada){
         PilaADT<Double> pila = new PilaA();
         double  op1, op2, resul;
@@ -133,28 +156,32 @@ public class Calculadora {
             return resultado;
         } catch (RuntimeException e) {
             if ("".equals(resultado)) {
-                resultado = "Expresión no valida";
+                resultado = "Expzresión no valida";
             }
             return resultado;
             
         }      
     }
+    
+    /**
+     * no es operador es un auxiliar para el manejo de las prioridades de los operadores.
+     * @param dato de un String
+     * @return <ul>
+     *      <li>true: Si no es operado</li>
+     *      <li>false: Si es un operador</li>
+     *      </ul>
+     */
     private boolean noEsOperador(String dato){
         return !dato.equals("+") && !dato.equals("-") && !dato.equals("*") && !dato.equals("/");
     }
     
-    /* Método auxiliar para el manejo de las prioridades de los operadores. Regresa 0,
-     * el valor más pequeño, cuando el dato dado es un "(". De esta manera
-     * el "(" sólo se saca de la pila cuando se encuentre un ")".
-     */
+    
     
     
     /**
-     * 
-     * 
-     * @param cadena
-     * Este metodo divide el String divido en espacio, diferenciando entre numeros 
-     * @return String aditado
+     * espaciarString divide el String divido en espacio, diferenciando entre numeros
+     * @param cadena de String
+     * @return String con espacios
      */    
     public String espaciarString(String cadena){
         String text ="";
@@ -166,7 +193,7 @@ public class Calculadora {
                 text+=" "+c+" ";
                 
             } else {
-                if (c == '-' && boolenaExcepcionNum(cadena, (i-1))) {
+                if (c == '-' && booleanExcepcion(cadena, (i-1))) {
                     text+=" "+c+" ";
                     
                 } else {
@@ -180,8 +207,19 @@ public class Calculadora {
         String trim = replaceAll.trim();
         return  trim;
     }
+    
+    /**
+     * booleanExcepcion checa si un caracter es un digito y evita el error de no econtrar characteres
+     * @param cadena de String
+     * @param charABuscar int que indica el lugar donde se busca 
+     * @see espaciarString
+     * @return <ul> 
+     *      <li>true: si es un digito</li>
+     *      <li>false: si no es un digito o es un error</li>
+     *      </ul>
+     */
 
-    public boolean boolenaExcepcionNum(String cadena, int charABuscar){
+    public boolean booleanExcepcion(String cadena, int charABuscar){
         boolean prueba ;
         try {
             char charAt = cadena.charAt(charABuscar);            
@@ -194,17 +232,29 @@ public class Calculadora {
         } 
     }
     
-    public String calcEnUnPaso(String cadena){
-        cadena = calcula(conviertePostfija(espaciarString(cadena)));
+    /**
+     * calcular usa todas las funciones y las engloba en una 
+     * @param cadena de String
+     * @see espaciarString
+     * @see conviertePosfija
+     * @see calcula
+     * @return String con el resultado
+     */
+    public String calcular(String cadena){
+        cadena = calcula(conviertePosfija(espaciarString(cadena)));
         return  cadena;
         
     }
     
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Calculadora calc = new Calculadora();
         
         
-        System.out.println(calc.calcEnUnPaso("-1+212*(-8/-94.56+-9)"));
+        System.out.println(calc.calcular("-1+212*(-8/-94.56+-9)"));
         
         
     }
