@@ -35,8 +35,8 @@ public class Calculadora {
      * @return String[] con la cadena separada cada que hay un espacio
      */
     public String[] obtieneTokens(String  cadena){
-        String[] ojo = cadena.split(" ");
-      return ojo;
+        String[] strings = cadena.split(" ");
+      return strings;
     }
     
     /**
