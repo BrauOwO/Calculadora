@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package proyectocalculadora;
+package proyectoCalculadora;
 
+import pilas.PilaADT;
+import pilas.PilaA;
 import java.util.ArrayList;
 
 /**
@@ -33,8 +35,8 @@ public class Calculadora {
      * @return String[] con la cadena separada cada que hay un espacio
      */
     public String[] obtieneTokens(String  cadena){
-        String[] ojo = cadena.split(" ");
-      return ojo;
+        String[] strings = cadena.split(" ");
+      return strings;
     }
     
     /**
@@ -156,7 +158,7 @@ public class Calculadora {
             return resultado;
         } catch (RuntimeException e) {
             if ("".equals(resultado)) {
-                resultado = "Expzresión no valida";
+                resultado = "Expresión no valida";
             }
             return resultado;
             
@@ -224,6 +226,13 @@ public class Calculadora {
         try {
             char charAt = cadena.charAt(charABuscar);            
             prueba = Character.isDigit(charAt);
+            if (prueba || charAt ==')') {
+                prueba = true;
+                
+            } else {
+                prueba = false;
+                
+            }
             return prueba;
             
         } catch (Exception e) {
@@ -241,21 +250,50 @@ public class Calculadora {
      * @return String con el resultado
      */
     public String calcular(String cadena){
-        cadena = calcula(conviertePosfija(espaciarString(cadena)));
+        cadena = calcula(conviertePosfija(espaciarString(arreglaParentesisMultiplicacion(cadena))));
         return  cadena;
         
     }
     
     /**
-     *
-     * @param args
+     * Método que agrega un signo de multiplicación entre paréntesis sin operador entre ellos.
+     * @author Samuel Orduña
+     * @param a cadena de String
+     * @return Cadena arreglada 
      */
+    public String arreglaParentesisMultiplicacion(String a){
+        // Método que agrega un signo de multiplicación entre paréntesis sin operador entre ellos.
+        StringBuilder sb = new StringBuilder();
+        int n = a.length();
+        for (int i = 0; i < n; i++) {
+            char c = a.charAt(i);
+            sb.append(c);
+            if (c == ')' && i < n - 1 && a.charAt(i + 1) == '(') {
+                sb.append('*');
+            }
+        }
+        
+        return sb.toString();
+        
+    } 
+    
+    
     public static void main(String[] args) {
         Calculadora calc = new Calculadora();
         
         
-        System.out.println(calc.calcular("-1+212*(-8/-94.56+-9)"));
+        System.out.println(calc.calcular("((1+2)-(3+5)-9)*4"));
+        System.out.println(calc.calcular("")); 
+        System.out.println(calc.calcular("2+3*4"));
+        System.out.println(calc.calcular("2+3+4+5+6")); 
+        System.out.println(calc.calcular("2+3+4*5+6")); 
+        System.out.println(calc.calcular("2*3/4*5/6")); 
+        System.out.println(calc.calcular("((9)+((-9)))")); 
+        System.out.println(calc.calcular("(-.9*9)")); 
+        System.out.println(calc.calcular("2+3/(5-2.5*2)")); 
+        System.out.println(calc.calcular("-1+212*(-8/-94.56+-9)")); 
+        System.out.println(calc.calcular("-(1+212)*(-8/-94.56+-9)"));
         
-        
+       
     }
 }

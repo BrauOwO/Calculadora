@@ -1,5 +1,5 @@
 
-package proyectocalculadora;
+package pilas;
 
 /**
  * @author Silvia Guardati
