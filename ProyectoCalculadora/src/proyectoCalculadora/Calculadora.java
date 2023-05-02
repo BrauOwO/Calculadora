@@ -46,57 +46,57 @@ public class Calculadora {
      * @return String[] con la cadena en modo posfijo
      */
     public String[] conviertePosfija(String  cadena) {
-        String [] elementos;
-        String [] resultado;
-        elementos = obtieneTokens(cadena);
-        ArrayList<String> postfija = new ArrayList();
-        PilaADT <String> pila = new PilaA();
+        String [] elementos; // arreglo de elementos de la expresión infija
+        String [] resultado; // arreglo de elementos de la expresión postfija
+        elementos = obtieneTokens(cadena); // método que convierte la cadena en un arreglo de elementos
+        ArrayList<String> postfija = new ArrayList(); // lista que contendrá los elementos de la expresión postfija
+        PilaADT <String> pila = new PilaA(); // pila que ayudará a convertir la expresión infija en postfija
         int e, n;
-        
-        e = 0;
-        n =  elementos.length;
-        
-        boolean negInicial = "-".equals(elementos[0]);
+
+        e = 0; // índice para recorrer el arreglo de elementos
+        n =  elementos.length; // tamaño del arreglo de elementos
+
+        boolean negInicial = "-".equals(elementos[0]); // bandera para detectar si el primer elemento es un signo negativo
         if (negInicial){ 
-            postfija.add("-1");
-            e++;
+            postfija.add("-1"); // agregar un -1 a la lista de elementos postfija
+            e++; // mover el índice para evitar volver a procesar el signo negativo
         }
-        
-        while(e<n){
-            String ele = elementos[e];
+
+        while(e<n){ // recorrer el arreglo de elementos
+            String ele = elementos[e]; // obtener el elemento actual
             if(prioridad(ele) != 0){//es un operador
                 while (!pila.isEmpty() && !"(".equals(pila.peek()) && prioridad(ele) <= prioridad(pila.peek()))
                     //el nuevo operador bota de la pila al resultado a los de mayor o igual prioridad
-                    postfija.add(pila.pop());
-                pila.push(ele);
+                    postfija.add(pila.pop()); // agregar a la lista de elementos postfija los operadores de mayor o igual prioridad que estén en la pila
+                pila.push(ele); // agregar el operador actual a la pila
             } 
             else{
             switch (ele) {
-                    case "(" -> pila.push(ele);
+                    case "(" -> pila.push(ele); // agregar un paréntesis abierto a la pila
                     case ")" -> {
                         //vacío los operadores hasta encontrar el paréntesis que abría
-                        while(!"(".equals(pila.peek()))
-                            postfija.add(pila.pop());
-                        pila.pop();
+                        while(!"(".equals(pila.peek())) // mientras no se encuentre el paréntesis abierto
+                            postfija.add(pila.pop()); // agregar a la lista de elementos postfija los operadores que estén en la pila
+                        pila.pop(); // quitar el paréntesis abierto de la pila
                         if (negInicial){
-                            postfija.add("*");
-                            negInicial = false;
+                            postfija.add("*"); // agregar un asterisco a la lista de elementos postfija
+                            negInicial = false; // desactivar la bandera que detecta el signo negativo inicial
                         }
                     }
-                    default -> postfija.add(ele); //es un operando
+                    default -> postfija.add(ele); // agregar un operando a la lista de elementos postfija
                 }
             }
-            e++;
+            e++; // mover el índice al siguiente elemento
         }
         while(!pila.isEmpty()){//vaciar operadores restantes
-            postfija.add(pila.pop());
+            postfija.add(pila.pop()); // agregar a la lista de elementos postfija los operadores que quedaron en la pila
         }
-        
-        resultado = new String[postfija.size()];
+
+        resultado = new String[postfija.size()]; // crear un arreglo del tamaño de la lista de elementos postfija
         for (int i = 0; i < resultado.length; i++) {
-            resultado[i] = postfija.get(i);
+            resultado[i] = postfija.get(i); // copiar los elementos de la lista de elementos postfija al arreglo resultado
         }
-        
+
         return resultado;
     }
     
