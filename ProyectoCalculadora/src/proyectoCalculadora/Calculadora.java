@@ -185,29 +185,27 @@ public class Calculadora {
      * @param cadena de String
      * @return String con espacios
      */    
-    public String espaciarString(String cadena){
-        String text ="";
-        
-        for (int i = 0; i < cadena.length(); i++) {
-            char c = cadena.charAt(i);
-            
-            if (!Character.isDigit(c) && c!='-' && c!='.') {
-                text+=" "+c+" ";
-                
+    public String espaciarString(String cadena) {
+        String text = ""; // Se inicializa la variable que contendrá la cadena con espacios
+
+        for (int i = 0; i < cadena.length(); i++) { // Se recorre la cadena caracter por caracter
+            char c = cadena.charAt(i); // Se obtiene el caracter en la posición i
+
+            if (!Character.isDigit(c) && c != '-' && c != '.') { // Si el caracter no es un dígito, un signo negativo ni un punto
+                text += " " + c + " "; // Se agrega el caracter con espacios alrededor
             } else {
-                if (c == '-' && booleanExcepcion(cadena, (i-1))) {
-                    text+=" "+c+" ";
-                    
-                } else {
-                    text+=c;
+                if (c == '-' && booleanExcepcion(cadena, (i-1))) { // Si el caracter es un signo negativo y el caracter anterior cumple cierta condición
+                    text += " " + c + " "; // Se agrega el caracter con espacios alrededor
+                } else { // Si no se cumple ninguna de las condiciones anteriores
+                    text += c; // Se agrega el caracter sin espacios
                 }
             }
             
         }
-        
-        String replaceAll = text.replaceAll("\\s+", " ");
-        String trim = replaceAll.trim();
-        return  trim;
+
+        String replaceAll = text.replaceAll("\\s+", " "); // Se eliminan los espacios redundantes
+        String trim = replaceAll.trim(); // Se eliminan los espacios al inicio y al final
+        return trim; // Se retorna la cadena con espacios
     }
     
     /**
@@ -221,24 +219,21 @@ public class Calculadora {
      *      </ul>
      */
 
-    public boolean booleanExcepcion(String cadena, int charABuscar){
-        boolean prueba ;
+    public boolean booleanExcepcion(String cadena, int charABuscar) {
+        boolean prueba; // Declaración de la variable booleana prueba
         try {
-            char charAt = cadena.charAt(charABuscar);            
-            prueba = Character.isDigit(charAt);
-            if (prueba || charAt ==')') {
+            char charAt = cadena.charAt(charABuscar); // Se obtiene el caracter de la cadena en la posición indicada por charABuscar
+            prueba = Character.isDigit(charAt); // Se verifica si el caracter es un dígito
+            if (prueba || charAt == ')') { // Si es un dígito o un paréntesis de cierre, la prueba es verdadera
                 prueba = true;
-                
-            } else {
+            } else { // Si no, la prueba es falsa
                 prueba = false;
                 
             }
-            return prueba;
-            
-        } catch (Exception e) {
-            return prueba = false;
-           
-        } 
+            return prueba; // Se retorna el valor de la prueba
+        } catch (Exception e) { // Si se produce alguna excepción
+            return prueba = false; // La prueba es falsa y se retorna este valor
+        }
     }
     
     /**
